@@ -1,0 +1,21 @@
+version: '3'
+services:
+    web:
+        build:
+            context: .
+            dockerfile: Dockerfile.dev
+        volumes:
+            - ./:/usr/src/app
+        ports:
+            - "3000:3000"
+        env_file:
+            - .env
+        links:
+            - redis
+        depends_on:
+            - redis
+    redis:
+        image: redis
+        container_name: redis
+        expose:
+            - 6379

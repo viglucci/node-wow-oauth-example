@@ -1,0 +1,18 @@
+{
+  "name": "node-wow-oauth-example",
+  "description": "A sample app using the Blizzard Developer APIs",
+  "env": {
+    "OAUTH_CLIENT_ID": {
+      "description": "The Client ID from develop.battle.net",
+      "value": ""
+    },
+    "OAUTH_CLIENT_SECRET": {
+      "description": "The Client Secret from develop.battle.net",
+      "value": ""
+    },
+    "OAUTH_CALLBACK_URL": {
+      "description": "The URL the user will be redirected back to after authenticating with Blizzard",
+      "value": ""
+    }
+  }
+}
