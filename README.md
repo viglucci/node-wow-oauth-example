@@ -1,4 +1,4 @@
-# Sample WoW Signature Generator - Node.js
+# node-wow-oauth-example - Node.js
 
 This application serves as an example node.js application for consuming OAuth APIs exposed for [World of Warcraft](https://develop.battle.net/documentation/world-of-warcraft).
 
