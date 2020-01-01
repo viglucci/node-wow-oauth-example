@@ -1,6 +1,6 @@
 # node-wow-oauth-example - Node.js
 
-This application serves as an example node.js application for consuming OAuth APIs exposed for [World of Warcraft](https://develop.battle.net/documentation/world-of-warcraft).
+This application serves as an example node.js application for consuming OAuth APIs exposed for [World of Warcraft](https://develop.battle.net/documentation/world-of-warcraft), and is a derivative work and extension of https://github.com/Blizzard/node-signature-generator.
 
 ## OAuth
 
@@ -13,8 +13,6 @@ The app leverages the Client Credentials flow to retrieve an OAuth token and the
 ### Code Authorization Flow
 
 The app leverages the Code Authorization flow by integrating the [passport](http://www.passportjs.org/) and [passport-bnet](https://github.com/Blizzard/passport-bnet) libraries to support user login through Blizzard's Battle.net.
-
-This repository is a derivative work and extension of https://github.com/Blizzard/node-signature-generator.
 
 ### Sessions & Redis
 
