@@ -1,6 +1,12 @@
 extends /partials/layout
 
 block body
-    h1= 'node-wow-oauth-example'
-    p= 'Click the link below to login with Blizzard Battlenet and explore your WoW data'
-    a(href='/login')= 'Login with Battlenet'
+    .jumbotron(class="mt-4")
+        h1.display-4 #{projectName}
+        p.lead
+            | Example application for consuming the public World of Warcraft OAuth APIs written in NodeJS. Visit the #[a(href='/about', target='_blank') about page] to view the source code on GitHub.
+        hr.my-4
+        p
+            | Click the link below to login with Blizzard Battlenet and view a list of your WoW characters.
+        p.lead
+            a.btn.btn-primary.btn-lg(href='/login' role='button') Login
