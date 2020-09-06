@@ -13,10 +13,10 @@ const CharacterService = require('./services/CharacterService');
 const SignatureService = require('./services/SignatureService');
 
 const redisSessionStore = new RedisStore({
-  client: redis.createClient({
-    host: process.env.REDIS_HOST,
-    port: process.env.REDIS_PORT
-  })
+    client: redis.createClient({
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT
+    })
 });
 
 const oauthClient = new OauthClient();
@@ -42,11 +42,11 @@ app.use(cookieParser());
 app.use(morgan('combined'));
 
 app.use(session({
-  name: 'node-wow-oauth-example-session',
-  secret: 'node-wow-oauth-example-session-secret',
-  saveUninitialized: true,
-  resave: true,
-  store: redisSessionStore,
+    name: 'node-wow-oauth-example-session',
+    secret: 'node-wow-oauth-example-session-secret',
+    saveUninitialized: true,
+    resave: true,
+    store: redisSessionStore,
 }));
 
 app.use(passport.initialize());
@@ -76,21 +76,21 @@ app.get('/about', (req, res, next) => {
 });
 
 app.get('/login', (req, res) => {
-  res.redirect('/login/oauth/battlenet');
+    res.redirect('/login/oauth/battlenet');
 });
 
 app.get('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/');
+    req.session.destroy();
+    res.redirect('/');
 });
 
 app.get('/login/oauth/battlenet', passport.authenticate('bnet'));
 
 app.get('/oauth/battlenet/callback',
-  passport.authenticate('bnet', { failureRedirect: '/' }),
-  function (req, res) {
-    res.redirect('/authenticated');
-  });
+    passport.authenticate('bnet', { failureRedirect: '/' }),
+    function (req, res) {
+        res.redirect('/authenticated');
+    });
 
 app.use('/authenticated', authenticatedGuard);
 
@@ -99,69 +99,70 @@ app.get('/authenticated', async (req, res, next) => {
 });
 
 app.get('/authenticated/characters', async (req, res, next) => {
-  try {
-    const characters = await characterService.getUsersCharacters(req.user.token);
-    res.render('pages/authenticated/characters', {
-      user: req.user,
-      characters
-    });
-  } catch (e) {
-    next(e);
-  }
+    try {
+        const characters = await characterService.getUsersCharacters(req.user.token);
+        res.render('pages/authenticated/characters', {
+            user: req.user,
+            characters
+        });
+    } catch (e) {
+        next(e);
+    }
 });
 
-app.get('/authenticated/characters/{realmSlug}/{characterName}/signature', async (req, res, next) => {
-  try {
-    const { characterName, realmName } = req.params;
-    const character = await characterService.getCharacter(characterName, realmName);
-    const characterMedia = await characterService.getCharacterMedia(character);
-    const { filename, data } = await signatureService.generateImage(character, characterMedia);
-    res.set('Content-Type', 'image/png');
-    res.set('Content-Disposition', `inline; filename='${filename}'`);
-    res.send(data);
-  } catch (err) {
-    next(err);
-  }
+app.get('/authenticated/characters/:realmSlug/:characterName/signature', async (req, res, next) => {
+    try {
+        const { characterName, realmSlug } = req.params;
+        const character = await characterService.getCharacter(characterName, realmSlug);
+        const characterMedia = await characterService.getCharacterMedia(character);
+        const { filename, data } = await signatureService.generateImage(character, characterMedia);
+        res.set('Content-Type', 'image/png');
+        res.set('Content-Disposition', `inline; filename='${filename}'`);
+        res.send(data);
+    } catch (err) {
+        next(err);
+    }
 });
 
 // 404 not found error handler
 app.use(function (req, res, next) {
-  res.format({
-    'text/plain': function () {
-      res.status(404).send('Resource not found');
-    },
-    'application/json': function () {
-      res.status(404).json({ message: 'Resource not found' });
-    },
-    'default': function () {
-      res.status(404).send('Resource not found');
-    }
-  });
+    res.format({
+        'text/plain': function () {
+            res.status(404).send('Resource not found');
+        },
+        'application/json': function () {
+            res.status(404).json({ message: 'Resource not found' });
+        },
+        'default': function () {
+            res.status(404).send('Resource not found');
+        }
+    });
 });
 
 // Server errors error handler
 app.use((err, req, res, next) => {
-  res.format({
-    'text/plain': function () {
-      res.status(500).send(err.toString());
-    },
-    'text/html': function () {
-      res
-        .status(500)
-        .render('pages/error', {
-          err
-        });
-    },
-    'application/json': function () {
-      res.status(500).json({
-        data: null,
-        error: err
-      });
-    }
-  });
+    console.error(err);
+    res.format({
+        'text/plain': function () {
+            res.status(500).send(err.toString());
+        },
+        'text/html': function () {
+            res
+                .status(500)
+                .render('pages/error', {
+                    err
+                });
+        },
+        'application/json': function () {
+            res.status(500).json({
+                data: null,
+                error: err
+            });
+        }
+    });
 });
 
 module.exports = async () => {
-  await oauthClient.getToken();
-  return Promise.resolve(app);
+    await oauthClient.getToken();
+    return Promise.resolve(app);
 };
