@@ -11,6 +11,9 @@ const passport = require('./oauth/passport');
 const OauthClient = require('./oauth/client');
 const CharacterService = require('./services/CharacterService');
 const SignatureService = require('./services/SignatureService');
+const createLogger = require('pino');
+
+const logger = createLogger();
 
 let redisClient;
 if (process.env.REDIS_URL) {
@@ -115,7 +118,7 @@ app.get('/authenticated/characters', async (req, res, next) => {
         next(e);
     }
 }, (err, req, res, next) => {
-    console.error(err);
+    logger.error(err);
     res.render("pages/error-characters");
 });
 
@@ -132,7 +135,7 @@ app.get('/authenticated/characters/:realmSlug/:characterName/signature', async (
         next(err);
     }
 }, (err, req, res, next) => {
-    console.error(err);
+    logger.error(err);
     const { characterName, realmSlug } = req.params;
     res.render("pages/error-signature", {
         characterName,
@@ -161,7 +164,7 @@ app.use(function (req, res, next) {
 
 // Server errors error handler
 app.use((err, req, res, next) => {
-    console.error(err);
+    logger.error(err);
     res.format({
         'text/html': function () {
             res

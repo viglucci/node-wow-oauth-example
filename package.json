@@ -17,6 +17,7 @@
     "morgan": "^1.10.0",
     "passport": "^0.4.1",
     "passport-bnet": "^2.0.0",
+    "pino": "^6.5.1",
     "pug": "^3.0.0",
     "ramda": "^0.26.1",
     "redis": "^2.8.0",
@@ -29,7 +30,7 @@
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon -L server.js"
+    "dev": "nodemon -L server.js | pino-pretty"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"
