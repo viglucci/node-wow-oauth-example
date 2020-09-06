@@ -45,7 +45,7 @@ class CharacterService {
 
     async getUsersCharacters(usersAccessToken) {
         const response = await rp.get({
-            uri: `https://us.api.blizzard.com/wow/user/characters`,
+            uri: `https://us.api.blizzard.com/profile/user/wow?namespace=profile-us`,
             json: true,
             headers: {
                 Authorization: `Bearer ${usersAccessToken}`

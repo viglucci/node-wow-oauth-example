@@ -24,6 +24,9 @@ const signatureService = new SignatureService();
 
 const app = express();
 
+app.set("view engine", "pug");
+app.set("views", "./resources/templates")
+
 app.use(cookieParser());
 
 app.use(morgan("combined"));
@@ -44,7 +47,7 @@ app.get("/", (req, res, next) => {
   if (req.isAuthenticated()) {
     return res.redirect("/authenticated");
   }
-  res.send(`<a href="/login">Login with Battlenet</a>`);
+  res.render("index");
 });
 
 app.get("/login", (req, res) => {
@@ -65,11 +68,20 @@ app.get("/oauth/battlenet/callback",
   });
 
 app.get("/authenticated", authenticatedGuard, async (req, res, next) => {
+    res.render("authenticated/index", {
+      user: req.user
+    });
+});
+
+app.get("/authenticated/characters", authenticatedGuard, async (req, res, next) => {
   try {
     const characters = await characterService.getUsersCharacters(req.user.token);
-    res.json(characters);
-  } catch (err) {
-    next(err);
+    res.render("authenticated/characters", {
+      user: req.user,
+      characters
+    });
+  } catch (e) {
+    next(e);
   }
 });
 
@@ -106,11 +118,18 @@ app.use((err, req, res, next) => {
     'text/plain': function () {
       res.status(500).send(err.toString());
     },
-    'application/json': function () {
-      res.status(500).json(err);
+    'text/html': function () {
+      res
+        .status(500)
+        .render("error", {
+          err
+        });
     },
-    'default': function () {
-      res.status(500).send(err.toString());
+    'application/json': function () {
+      res.status(500).json({
+        data: null,
+        error: err
+      });
     }
   });
 });

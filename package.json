@@ -17,6 +17,7 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.1",
     "passport-bnet": "^2.0.0",
+    "pug": "^3.0.0",
     "ramda": "^0.26.1",
     "redis": "^2.8.0",
     "request": "^2.88.0",
