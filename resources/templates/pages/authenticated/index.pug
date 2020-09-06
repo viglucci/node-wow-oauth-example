@@ -1,6 +1,8 @@
 extends /partials/layout
 
 block body
-    h1= 'You are logged in with Battlenet!'
-    pre
-        = JSON.stringify(currentUser, null, 2)
+    .mt-4
+        h1
+            | Welcome back #{currentUser.battletag}!
+        p
+            | Click "Characters" in the navbar to view a list of your WoW characters.
