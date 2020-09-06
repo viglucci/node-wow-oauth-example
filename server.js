@@ -1,14 +1,14 @@
-require("dotenv").config();
+require('dotenv').config();
 
-const throng = require("throng");
-const getApp = require("./app");
+const throng = require('throng');
+const getApp = require('./app');
 
 const port = process.env.PORT || 3000;
 
 throng({
   workers: 2,
   master: () => {
-    console.log("Starting master process");
+    console.log('Starting master process');
   },
   start: async (id) => {
     const app = await getApp();

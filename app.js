@@ -1,15 +1,15 @@
-const Promise = require("bluebird");
-const express = require("express");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const RedisStore = require("connect-redis")(session);
-const redis = require("redis");
-const morgan = require("morgan");
+const Promise = require('bluebird');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const redis = require('redis');
+const morgan = require('morgan');
 const authenticatedGuard = require('./middleware/authenticated-guard');
-const passport = require("./oauth/passport");
-const OauthClient = require("./oauth/client");
-const CharacterService = require("./services/CharacterService");
-const SignatureService = require("./services/SignatureService");
+const passport = require('./oauth/passport');
+const OauthClient = require('./oauth/client');
+const CharacterService = require('./services/CharacterService');
+const SignatureService = require('./services/SignatureService');
 
 const redisSessionStore = new RedisStore({
   client: redis.createClient({
@@ -24,16 +24,16 @@ const signatureService = new SignatureService();
 
 const app = express();
 
-app.set("view engine", "pug");
-app.set("views", "./resources/templates")
+app.set('view engine', 'pug');
+app.set('views', './resources/templates')
 
 app.use(cookieParser());
 
-app.use(morgan("combined"));
+app.use(morgan('combined'));
 
 app.use(session({
-  name: "node-wow-oauth-example-session",
-  secret: "node-wow-oauth-example-session-secret",
+  name: 'node-wow-oauth-example-session',
+  secret: 'node-wow-oauth-example-session-secret',
   saveUninitialized: true,
   resave: true,
   store: redisSessionStore,
@@ -43,40 +43,40 @@ app.use(passport.initialize());
 
 app.use(passport.session());
 
-app.get("/", (req, res, next) => {
+app.get('/', (req, res, next) => {
   if (req.isAuthenticated()) {
-    return res.redirect("/authenticated");
+    return res.redirect('/authenticated');
   }
-  res.render("index");
+  res.render('index');
 });
 
-app.get("/login", (req, res) => {
-  res.redirect("/login/oauth/battlenet");
+app.get('/login', (req, res) => {
+  res.redirect('/login/oauth/battlenet');
 });
 
-app.get("/logout", (req, res) => {
+app.get('/logout', (req, res) => {
   req.session.destroy();
-  res.redirect("/");
+  res.redirect('/');
 });
 
-app.get("/login/oauth/battlenet", passport.authenticate("bnet"));
+app.get('/login/oauth/battlenet', passport.authenticate('bnet'));
 
-app.get("/oauth/battlenet/callback",
-  passport.authenticate("bnet", { failureRedirect: "/" }),
+app.get('/oauth/battlenet/callback',
+  passport.authenticate('bnet', { failureRedirect: '/' }),
   function (req, res) {
-    res.redirect("/authenticated");
+    res.redirect('/authenticated');
   });
 
-app.get("/authenticated", authenticatedGuard, async (req, res, next) => {
-    res.render("authenticated/index", {
+app.get('/authenticated', authenticatedGuard, async (req, res, next) => {
+    res.render('authenticated/index', {
       user: req.user
     });
 });
 
-app.get("/authenticated/characters", authenticatedGuard, async (req, res, next) => {
+app.get('/authenticated/characters', authenticatedGuard, async (req, res, next) => {
   try {
     const characters = await characterService.getUsersCharacters(req.user.token);
-    res.render("authenticated/characters", {
+    res.render('authenticated/characters', {
       user: req.user,
       characters
     });
@@ -85,14 +85,14 @@ app.get("/authenticated/characters", authenticatedGuard, async (req, res, next) 
   }
 });
 
-app.get("/signature", async (req, res, next) => {
+app.get('/signature', async (req, res, next) => {
   try {
     const { characterName, realmName } = req.query;
     const character = await characterService.getCharacter(characterName, realmName);
     const characterMedia = await characterService.getCharacterMedia(character);
     const { filename, data } = await signatureService.generateImage(character, characterMedia);
-    res.set("Content-Type", "image/png");
-    res.set("Content-Disposition", `inline; filename="${filename}"`);
+    res.set('Content-Type', 'image/png');
+    res.set('Content-Disposition', `inline; filename='${filename}'`);
     res.send(data);
   } catch (err) {
     next(err);
@@ -102,13 +102,13 @@ app.get("/signature", async (req, res, next) => {
 app.use(function (req, res, next) {
   res.format({
     'text/plain': function () {
-      res.status(404).send("Resource not found");
+      res.status(404).send('Resource not found');
     },
     'application/json': function () {
-      res.status(404).json({ message: "Resource not found" });
+      res.status(404).json({ message: 'Resource not found' });
     },
     'default': function () {
-      res.status(404).send("Resource not found");
+      res.status(404).send('Resource not found');
     }
   });
 });
@@ -121,7 +121,7 @@ app.use((err, req, res, next) => {
     'text/html': function () {
       res
         .status(500)
-        .render("error", {
+        .render('error', {
           err
         });
     },

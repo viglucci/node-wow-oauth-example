@@ -1,7 +1,9 @@
-const request = require("request");
-const tmp = require("tmp");
-const fs = require("fs");
-const slug = require("slug");
+const request = require('request');
+const tmp = require('tmp');
+const fs = require('fs');
+const slug = require('slug');
+const gm = require('gm');
+
 const {
   BACKGROUND_IMAGE_EMPTY_PATH,
   BACKGROUND_IMAGE_ALLIANCE_PATH,
@@ -9,10 +11,10 @@ const {
   BACKGROUND_IMAGE_NEUTRAL_PATH,
   FONT_MERRIWEATHER_BOLD_PATH,
   FONT_MERRIWEATHER_REGULAR_PATH
-} = require("../constants");
+} = require('../constants');
 
-// imageMagick made available when running in docker
-const gm = require("gm").subClass({ imageMagick: true });
+// imageMagick only available when running in docker
+const imageMagick = gm.subClass({ imageMagick: true });
 
 class SignatureService {
 
@@ -21,19 +23,19 @@ class SignatureService {
     return new Promise((resolve, reject) => {
       request(mediaUrl)
         .pipe(fs.createWriteStream(tmpName))
-        .on("finish", () => {
+        .on('finish', () => {
           resolve(tmpName);
         })
-        .on("error", (err) => {
+        .on('error', (err) => {
           reject(err);
         });
     });
   }
 
   getBackgroundImagePath(factionEnum) {
-    return factionEnum === "ALLIANCE"
+    return factionEnum === 'ALLIANCE'
       ? BACKGROUND_IMAGE_ALLIANCE_PATH
-      : factionEnum === "HORDE"
+      : factionEnum === 'HORDE'
         ? BACKGROUND_IMAGE_HORDE_PATH
         : BACKGROUND_IMAGE_NEUTRAL_PATH;
   }
@@ -44,25 +46,25 @@ class SignatureService {
     const backgroundImage = this.getBackgroundImagePath(faction.type);
     const tmpBustPath = await this.downloadCharacterMediaAsset(bustUrl);
     const identityString = `Level ${character.level} ${character.character_class.name} ${
-      character.guild ? `of <${character.guild.name}> ` : ""
+      character.guild ? `of <${character.guild.name}> ` : ''
       }on ${character.realm.name}`;
     const itemLevelString = `Item Level: ${character.equipped_item_level} (${character.average_item_level})`;
     const achievementPointsString = `Achievement Points: ${character.achievement_points}`;
 
     return new Promise((resolve, reject) => {
-      gm(BACKGROUND_IMAGE_EMPTY_PATH)
-        .in("-page", "+2+2")
+      imageMagick(BACKGROUND_IMAGE_EMPTY_PATH)
+        .in('-page', '+2+2')
         .in(tmpBustPath)
-        .in("-page", "+0+0")
+        .in('-page', '+0+0')
         .in(backgroundImage)
         .mosaic()
         .font(FONT_MERRIWEATHER_BOLD_PATH)
-        .fontSize("30")
-        .fill("#deaa00")
+        .fontSize('30')
+        .fill('#deaa00')
         .drawText(220, 40, character.name)
         .font(FONT_MERRIWEATHER_REGULAR_PATH)
-        .fontSize("12")
-        .fill("#888888")
+        .fontSize('12')
+        .fill('#888888')
         .drawText(
           220,
           65,
@@ -78,7 +80,7 @@ class SignatureService {
           105,
           achievementPointsString
         )
-        .toBuffer("PNG", (err, buffer) => {
+        .toBuffer('PNG', (err, buffer) => {
           fs.unlinkSync(tmpBustPath);
           if (err) {
             reject(err);

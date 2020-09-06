@@ -1,9 +1,9 @@
-const rp = require("request-promise");
-const slug = require("slug");
+const rp = require('request-promise');
+const slug = require('slug');
 const {
     NAMESPACE_PROFILE_US,
     DEFAULT_LOCALE
-} = require("../constants");
+} = require('../constants');
 
 class CharacterService {
 

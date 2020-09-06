@@ -1,6 +1,6 @@
-const { NAMESPACE_STATIC_US } = require("../constants");
-const rp = require("request-promise");
-const R = require("ramda");
+const { NAMESPACE_STATIC_US } = require('../constants');
+const rp = require('request-promise');
+const R = require('ramda');
 
 class ClassesService {
 
@@ -27,10 +27,10 @@ class ClassesService {
     async getClassesIndex() {
         const oauthToken = await this.oauthClient.getToken();
         const response = await rp.get({
-            uri: "https://us.api.blizzard.com/data/wow/playable-class/index",
+            uri: 'https://us.api.blizzard.com/data/wow/playable-class/index',
             json: true,
             qs: {
-                locale: "en_US",
+                locale: 'en_US',
                 namespace: NAMESPACE_STATIC_US
             },
             headers: {

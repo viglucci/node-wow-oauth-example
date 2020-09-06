@@ -1,4 +1,4 @@
-const oauth2 = require("simple-oauth2");
+const oauth2 = require('simple-oauth2');
 
 const credentials = {
     client: {
@@ -6,7 +6,7 @@ const credentials = {
         secret: process.env.OAUTH_CLIENT_SECRET
     },
     auth: {
-        tokenHost: "https://us.battle.net"
+        tokenHost: 'https://us.battle.net'
     }
 };
 

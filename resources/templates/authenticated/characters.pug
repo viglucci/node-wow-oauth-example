@@ -1,8 +1,8 @@
 extends ../layout
 
 block body
-    h1= "Your World of Warcraft Characters"
+    h1= 'Your World of Warcraft Characters'
     ul
-        li: a(href="/authenticated")= "Back"
+        li: a(href='/authenticated')= 'Back'
     pre
         = JSON.stringify(characters, null, 2)
