@@ -1,6 +1,8 @@
 # node-wow-oauth-example - Node.js
 
-This application serves as an example node.js application for consuming OAuth APIs exposed for [World of Warcraft](https://develop.battle.net/documentation/world-of-warcraft), and is a derivative work and extension of https://github.com/Blizzard/node-signature-generator.
+This application serves as an example node.js application for consuming OAuth APIs exposed for [World of Warcraft](https://develop.battle.net/documentation/world-of-warcraft). This codebase was orginally forked and expanded on from https://github.com/Blizzard/node-signature-generator.
+
+![Image of example generated image](./ui-example.jpg)
 
 ## OAuth
 
@@ -20,7 +22,7 @@ This application leverage Redis as a remote session store, which allows for the 
 
 ## Example Output
 
-http://localhost:3000/signature?characterName=tmpikaboo&realmName=tichondrius
+The primary function of the application is to list a users World of Warcraft characters and then allow the user to generate a "forum signature" for a select character.
 
 ![Image of example generated image](./example-signature.png)
 
