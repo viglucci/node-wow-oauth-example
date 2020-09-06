@@ -46,7 +46,7 @@ Depending on which platform you are developing on, you may be required to instal
 
 To simplify the ImageMagick and redis dependencies described above, this application is also set up to run in a docker container with an existing [docker-compose](https://docs.docker.com/compose/) file already written for convenience.
 
-You can run the application easily by invoking the `docker-compose -f docker-compose-dev.yml up` command in a command-line shell, granted that you already have [Docker](https://www.docker.com/products/docker-desktop) installed on your system.
+You can run the application easily by invoking the `docker-compose -f docker-compose.yml up` command in a command-line shell, granted that you already have [Docker](https://www.docker.com/products/docker-desktop) installed on your system.
 
 ## Development
 
