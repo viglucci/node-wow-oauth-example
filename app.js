@@ -12,11 +12,18 @@ const OauthClient = require('./oauth/client');
 const CharacterService = require('./services/CharacterService');
 const SignatureService = require('./services/SignatureService');
 
-const redisSessionStore = new RedisStore({
-    client: redis.createClient({
+let redisClient;
+if (process.env.REDIS_URL) {
+    redisClient = redis.createClient(process.env.REDIS_URL);
+} else {
+    redisClient = redis.createClient({
         host: process.env.REDIS_HOST,
         port: process.env.REDIS_PORT
-    })
+    });
+}
+
+const redisSessionStore = new RedisStore({
+    client: redisClient
 });
 
 const oauthClient = new OauthClient();
