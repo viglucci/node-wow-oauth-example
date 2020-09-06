@@ -1,0 +1,12 @@
+extends /partials/layout
+
+block body
+    if process.env.NODE_ENV === 'development'
+        h1= err.message
+        pre
+            != err.stack
+    else
+        .my-4
+            .alert.alert-danger(role='alert')
+                h4.alert-heading Sorry, an error occurred.
+

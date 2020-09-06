@@ -136,14 +136,18 @@ app.get('/authenticated/characters/:realmSlug/:characterName/signature', async (
 // 404 not found error handler
 app.use(function (req, res, next) {
     res.format({
-        'text/plain': function () {
-            res.status(404).send('Resource not found');
+        'text/html': function () {
+            res
+                .status(404)
+                .render('pages/errors/404');
         },
         'application/json': function () {
-            res.status(404).json({ message: 'Resource not found' });
-        },
-        'default': function () {
-            res.status(404).send('Resource not found');
+            res.status(404).json({
+                data: null,
+                error: {
+                    message: 'Resource not found'
+                }
+            });
         }
     });
 });
@@ -152,21 +156,24 @@ app.use(function (req, res, next) {
 app.use((err, req, res, next) => {
     console.error(err);
     res.format({
-        'text/plain': function () {
-            res.status(500).send(err.toString());
-        },
         'text/html': function () {
             res
                 .status(500)
-                .render('pages/error', {
+                .render('pages/errors/500', {
                     err
                 });
         },
         'application/json': function () {
-            res.status(500).json({
-                data: null,
-                error: err
-            });
+            if (process.env.NODE_ENV === 'development') {
+                res.status(500).json({
+                    data: null,
+                    error: err
+                });
+            } else {
+                res.status(500).json({
+                    data: null
+                });
+            }
         }
     });
 });
