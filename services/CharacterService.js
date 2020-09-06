@@ -43,7 +43,7 @@ class CharacterService {
         return response;
     }
 
-    async getUsersCharacters(usersAccessToken) {
+    async getUsersCharactersList(usersAccessToken) {
         const response = await rp.get({
             uri: `https://us.api.blizzard.com/profile/user/wow?namespace=profile-us`,
             json: true,
@@ -51,7 +51,19 @@ class CharacterService {
                 Authorization: `Bearer ${usersAccessToken}`
             }
         });
-        return response;
+        const { wow_accounts } = response;
+        const characters = wow_accounts
+            .map((account) => {
+                return account.characters.map((character) => {
+                    character.account_id = account.id;
+                    return character;
+                });
+            })
+            .flat()
+            .sort((characterA, characterB) => {
+                return (characterA.level < characterB.level) ? 1 : -1;
+            });
+        return characters;
     }
 }
 

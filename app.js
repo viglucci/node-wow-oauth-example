@@ -100,7 +100,7 @@ app.get('/authenticated', async (req, res, next) => {
 
 app.get('/authenticated/characters', async (req, res, next) => {
     try {
-        const characters = await characterService.getUsersCharacters(req.user.token);
+        const characters = await characterService.getUsersCharactersList(req.user.token);
         res.render('pages/authenticated/characters', {
             characters
         });
