@@ -107,6 +107,9 @@ app.get('/authenticated/characters', async (req, res, next) => {
     } catch (e) {
         next(e);
     }
+}, (err, req, res, next) => {
+    console.error(err);
+    res.render("pages/error-characters");
 });
 
 app.get('/authenticated/characters/:realmSlug/:characterName/signature', async (req, res, next) => {
