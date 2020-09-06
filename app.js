@@ -102,7 +102,6 @@ app.get('/authenticated/characters', async (req, res, next) => {
     try {
         const characters = await characterService.getUsersCharacters(req.user.token);
         res.render('pages/authenticated/characters', {
-            user: req.user,
             characters
         });
     } catch (e) {
