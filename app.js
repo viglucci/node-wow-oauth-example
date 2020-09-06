@@ -121,6 +121,13 @@ app.get('/authenticated/characters/:realmSlug/:characterName/signature', async (
     } catch (err) {
         next(err);
     }
+}, (err, req, res, next) => {
+    console.error(err);
+    const { characterName, realmSlug } = req.params;
+    res.render("pages/error-signature", {
+        characterName,
+        realmSlug
+    });
 });
 
 // 404 not found error handler

@@ -1,0 +1,11 @@
+extends /partials/layout
+
+block body
+    .my-4
+        .alert.alert-danger(role='alert')
+            h4.alert-heading Sorry, an error occurred.
+            p
+                | Sorry but we were unable to generate a forum signature for #{realmSlug}/#{characterName}.
+            hr
+            p.mb-0
+                | Please try logging this character out of World of Warcraft and then try again.
