@@ -1,4 +1,5 @@
 const Promise = require('bluebird');
+const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -25,7 +26,16 @@ const signatureService = new SignatureService();
 const app = express();
 
 app.set('view engine', 'pug');
-app.set('views', './resources/templates')
+app.set('views', path.resolve('./resources/templates'));
+app.locals.basedir = app.get('views');
+
+app.use((req, res, next) => {
+    res.locals = {
+        ...res.locals,
+        projectName: process.env.PROJECT_NAME || 'Node WoW OAuth Example'
+    };
+    next();
+});
 
 app.use(cookieParser());
 
@@ -43,11 +53,26 @@ app.use(passport.initialize());
 
 app.use(passport.session());
 
-app.get('/', (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return res.redirect('/authenticated');
-  }
-  res.render('index');
+app.use((req, res, next) => {
+    if (req.isAuthenticated()) {
+        res.locals.currentUser = req.user;
+    }
+    next();
+});
+
+app.get('/',
+    (req, res, next) => {
+        if (req.isAuthenticated()) {
+            return res.redirect('/authenticated');
+        }
+        next();
+    },
+    (req, res, next) => {
+        res.render('pages/index');
+    });
+
+app.get('/about', (req, res, next) => {
+    return res.redirect('https://github.com/viglucci/node-wow-oauth-example');
 });
 
 app.get('/login', (req, res) => {
@@ -67,16 +92,16 @@ app.get('/oauth/battlenet/callback',
     res.redirect('/authenticated');
   });
 
-app.get('/authenticated', authenticatedGuard, async (req, res, next) => {
-    res.render('authenticated/index', {
-      user: req.user
-    });
+app.use('/authenticated', authenticatedGuard);
+
+app.get('/authenticated', async (req, res, next) => {
+    res.render('pages/authenticated/index');
 });
 
-app.get('/authenticated/characters', authenticatedGuard, async (req, res, next) => {
+app.get('/authenticated/characters', async (req, res, next) => {
   try {
     const characters = await characterService.getUsersCharacters(req.user.token);
-    res.render('authenticated/characters', {
+    res.render('pages/authenticated/characters', {
       user: req.user,
       characters
     });
@@ -85,9 +110,9 @@ app.get('/authenticated/characters', authenticatedGuard, async (req, res, next) 
   }
 });
 
-app.get('/signature', async (req, res, next) => {
+app.get('/authenticated/characters/{realmSlug}/{characterName}/signature', async (req, res, next) => {
   try {
-    const { characterName, realmName } = req.query;
+    const { characterName, realmName } = req.params;
     const character = await characterService.getCharacter(characterName, realmName);
     const characterMedia = await characterService.getCharacterMedia(character);
     const { filename, data } = await signatureService.generateImage(character, characterMedia);
@@ -99,6 +124,7 @@ app.get('/signature', async (req, res, next) => {
   }
 });
 
+// 404 not found error handler
 app.use(function (req, res, next) {
   res.format({
     'text/plain': function () {
@@ -113,6 +139,7 @@ app.use(function (req, res, next) {
   });
 });
 
+// Server errors error handler
 app.use((err, req, res, next) => {
   res.format({
     'text/plain': function () {
@@ -121,7 +148,7 @@ app.use((err, req, res, next) => {
     'text/html': function () {
       res
         .status(500)
-        .render('error', {
+        .render('pages/error', {
           err
         });
     },

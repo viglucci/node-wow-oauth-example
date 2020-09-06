@@ -1,0 +1,6 @@
+extends /partials/layout
+
+block body
+    h1= 'You are logged in with Battlenet!'
+    pre
+        = JSON.stringify(currentUser, null, 2)

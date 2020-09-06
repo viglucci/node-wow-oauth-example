@@ -1,0 +1,21 @@
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+    .container
+        a.navbar-brand(href='/') #{projectName}
+        button.navbar-toggler.navbar-toggler-right(type='button' data-toggle='collapse' data-target='#navbarResponsive' aria-controls='navbarResponsive' aria-expanded='false' aria-label='Toggle navigation')
+            span.navbar-toggler-icon
+        #navbarResponsive.collapse.navbar-collapse
+            ul.navbar-nav.ml-auto
+                li.nav-item
+                    a.nav-link(href='/about', target='_blank') About
+                if currentUser
+                    li.nav-item
+                        a.nav-link(href='/authenticated/characters') Characters
+                    li.nav-item.dropdown
+                        a#navbarDropdownPages.nav-link.dropdown-toggle(href='#' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
+                            | #{currentUser.battletag}
+                        .dropdown-menu.dropdown-menu-right(aria-labelledby='navbarDropdownPages')
+                            a.dropdown-item(href='/logout') Logout
+                else
+                    li.nav-item
+                        a.nav-link(href='/login') Login
+

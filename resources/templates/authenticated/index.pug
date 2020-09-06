@@ -1,9 +1,0 @@
-extends ../layout
-
-block body
-    h1= 'You are logged in with Battlenet!'
-    ul
-        li: a(href='/logout')= 'Logout'
-        li: a(href='/authenticated/characters')= 'View your Characters'
-    pre
-        = JSON.stringify(user, null, 2)
