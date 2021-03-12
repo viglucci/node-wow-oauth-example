@@ -2,7 +2,8 @@
 
 This application serves as an example node.js application for consuming OAuth APIs exposed for [World of Warcraft](https://develop.battle.net/documentation/world-of-warcraft). This codebase was orginally forked and expanded on from https://github.com/Blizzard/node-signature-generator.
 
-![Image of example generated image](./ui-example.jpg)
+![Image one of example UI](./node-wow-oauth-example-1.png)
+![Image two of example UI](./node-wow-oauth-example-2.png)
 
 ## OAuth
 
