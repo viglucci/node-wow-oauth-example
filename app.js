@@ -10,7 +10,6 @@ const authenticatedGuard = require('./middleware/authenticated-guard');
 const passport = require('./oauth/passport');
 const OauthClient = require('./oauth/client');
 const CharacterService = require('./services/CharacterService');
-const SignatureService = require('./services/SignatureService');
 const createLogger = require('pino');
 
 const logger = createLogger();
@@ -31,7 +30,6 @@ const redisSessionStore = new RedisStore({
 
 const oauthClient = new OauthClient();
 const characterService = new CharacterService(oauthClient);
-const signatureService = new SignatureService();
 
 const app = express();
 
@@ -81,7 +79,7 @@ app.get('/',
         res.render('pages/index');
     });
 
-app.get('/about', (req, res, next) => {
+app.get('/github', (req, res, next) => {
     return res.redirect('https://github.com/viglucci/node-wow-oauth-example');
 });
 
@@ -120,27 +118,6 @@ app.get('/authenticated/characters', async (req, res, next) => {
 }, (err, req, res, next) => {
     logger.error(err);
     res.render("pages/error-characters");
-});
-
-app.get('/authenticated/characters/:realmSlug/:characterName/signature', async (req, res, next) => {
-    try {
-        const { characterName, realmSlug } = req.params;
-        const character = await characterService.getCharacter(characterName, realmSlug);
-        const characterMedia = await characterService.getCharacterMedia(character);
-        const { filename, data } = await signatureService.generateImage(character, characterMedia);
-        res.set('Content-Type', 'image/png');
-        res.set('Content-Disposition', `inline; filename='${filename}'`);
-        res.send(data);
-    } catch (err) {
-        next(err);
-    }
-}, (err, req, res, next) => {
-    logger.error(err);
-    const { characterName, realmSlug } = req.params;
-    res.render("pages/error-signature", {
-        characterName,
-        realmSlug
-    });
 });
 
 // 404 not found error handler

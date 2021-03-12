@@ -20,12 +20,6 @@ The app leverages the Code Authorization flow by integrating the [passport](http
 
 This application leverage Redis as a remote session store, which allows for the usage of the [throng](https://www.npmjs.com/package/throng) library to spawn multiple node.js processes and keep the user logged in regardless of which node.js process handles their HTTP request.
 
-## Example Output
-
-The primary function of the application is to list a users World of Warcraft characters and then allow the user to generate a "forum signature" for a select character.
-
-![Image of example generated image](./example-signature.png)
-
 ## API Usage
 
 In accordance with the [World of Warcraft Community API Migration](https://develop.battle.net/documentation/world-of-warcraft/community-api-migration-status) this application leverages only the WoW Game Data APIs.
@@ -38,15 +32,9 @@ To get started experimenting with this application, you will first need to follo
 
 Once you have created your OAuth client on develop.battle.net, copy the `.env.example` file to `.env`, and fill in the values for the `OAUTH_CLIENT_ID` and `OAUTH_CLIENT_SECRET` variables. The values from the `.env` file will be loaded by the [dotenv](https://www.npmjs.com/package/dotenv) library at startup.
 
-## ImageMagick
-
-This application leverages [ImageMagic](https://imagemagick.org/) abstracted through the [gm](https://www.npmjs.com/package/gm) node module to manipulate and produce the image output files.
-
-Depending on which platform you are developing on, you may be required to install ImageMagic on your system before you can successfully run and invoke the application.
-
 ## Docker Support
 
-To simplify the ImageMagick and redis dependencies described above, this application is also set up to run in a docker container with an existing [docker-compose](https://docs.docker.com/compose/) file already written for convenience.
+To simplify the redis dependencies described above, this application is also set up to run in a docker container with an existing [docker-compose](https://docs.docker.com/compose/) file already written for convenience.
 
 You can run the application easily by invoking the `docker-compose -f docker-compose.yml up` command in a command-line shell, granted that you already have [Docker](https://www.docker.com/products/docker-desktop) installed on your system.
 

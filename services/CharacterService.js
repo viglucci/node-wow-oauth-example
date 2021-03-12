@@ -53,17 +53,25 @@ class CharacterService {
         });
         const { wow_accounts } = response;
         const characters = wow_accounts
-            .map((account) => {
-                return account.characters.map((character) => {
-                    character.account_id = account.id;
-                    return character;
-                });
-            })
+            .map((account) => this._mapWowAccount(account))
             .flat()
             .sort((characterA, characterB) => {
                 return (characterA.level < characterB.level) ? 1 : -1;
             });
         return characters;
+    }
+
+    _mapWowAccount(account) {
+        const { characters } = account;
+        return characters.map((character) => this._mapCharacter(account, character));
+    }
+
+    _mapCharacter(account, character) {
+        character.account_id = account.id;
+        const characterName = character.name.toLowerCase();
+        const realmSlug = character.realm.slug;
+        character.armoryUrl = `https://worldofwarcraft.com/character/us/${realmSlug}/${characterName}`;
+        return character;
     }
 }
 

@@ -8,18 +8,15 @@ block body
         table.table
             thead
                 tr
-                    th(scope='col') #
+                    th(scope='col') WoW Account ID
                     th(scope='col') Name
                     th(scope='col') Realm
                     th(scope='col') Level
                     th(scope='col') Action
             tbody
-                each character, i in characters
-                    -
-                        const signatureUrl = `/authenticated/characters/${character.realm.slug}/${character.name.toLowerCase()}/signature`;
-                        const armoryUrl = `https://worldofwarcraft.com/character/us/${character.realm.slug}/${character.name.toLowerCase()}`;
+                each character in characters
                     tr
-                        th(scope='row') #{i+1}
+                        td #{character.account_id}
                         td #{character.name}
                         td #{character.realm.name.en_US}
                         td #{character.level}
@@ -28,5 +25,4 @@ block body
                                 button.btn.btn-secondary.btn-sm.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')
                                     | Actions
                                 .dropdown-menu
-                                    a.dropdown-item(href=signatureUrl, target='_blank') Generate Forum Signature
-                                    a.dropdown-item(href=armoryUrl, target='_blank') View Armory Profile
+                                    a.dropdown-item(href=character.armoryUrl, target='_blank') View Armory Profile

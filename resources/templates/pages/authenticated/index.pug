@@ -4,5 +4,5 @@ block body
     .mt-4
         h1
             | Welcome back #{currentUser.battletag}!
-        p
-            | Click "Characters" in the navbar to view a list of your WoW characters.
+        p.lead
+            a.btn.btn-primary.btn-lg(href='/authenticated/characters' role='button') View my Characters
